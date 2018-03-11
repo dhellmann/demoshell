@@ -34,6 +34,7 @@ def on_enter(key):
             stderr=subprocess.STDOUT,
             close_fds=True,
             shell=True,
+            executable='/bin/bash',
         )
         prompt_widget.set_edit_text('')
 
