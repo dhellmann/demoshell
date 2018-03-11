@@ -74,7 +74,7 @@ def extend_text(widget, style, text):
         new_text = parts[loc][1] + text
         parts[loc] = (parts[loc][0], new_text)
     else:
-        raise ValueError('unknown style: {} {!r}'.format(style, text))
+        raise ValueError('unknown style {} used for {!r}'.format(style, text))
     widget.set_text(parts)
 
 
