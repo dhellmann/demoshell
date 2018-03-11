@@ -7,6 +7,7 @@
 # TODO: fix output mingling between commands by using different widgets?
 # TODO: allow the config file to define new builtins
 # TODO: allow the config file to define aliases to handle the "ll" case
+# TODO: figure out how to map ctrl-l to clear
 
 import functools
 import subprocess
