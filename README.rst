@@ -26,3 +26,35 @@ other people's heads.
 at the top of the screen and showing the output of commands below,
 pushing older commands off of the bottom of the screen to make space
 for newer text.
+
+Using demoshell
+===============
+
+Install the shell with ``pip3`` (it works best under Python 3)::
+
+  $ pip3 install demoshell
+
+Run ``demoshell``::
+
+  $ demoshell
+
+Run any shell command at the prompt::
+
+  $ ls
+
+  ls
+  AUTHORS
+  ChangeLog
+  LICENSE
+  README.rst
+  demoshell
+  demoshell.egg-info
+  dist
+  requirements.txt
+  setup.cfg
+  setup.py
+  test
+
+Use ``exit`` or ``Ctrl-D`` to leave the shell.
+
+Use ``clear`` to clear the screen.
