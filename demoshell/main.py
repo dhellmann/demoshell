@@ -31,6 +31,10 @@ class DemoShell:
             body=urwid.Filler(self.output_widget, valign='top'),
             focus_part='header',
         )
+        self._builtins = {
+            'exit': self._exit,
+            'clear': self._clear,
+        }
 
     def run(self):
         self.loop = urwid.MainLoop(
@@ -40,22 +44,21 @@ class DemoShell:
         )
         self.loop.run()
 
+    def _exit(self):
+        raise urwid.ExitMainLoop()
+
     def on_enter(self, key):
         if key == 'enter':
             cmd = self.prompt_widget.text
             cmd = cmd.lstrip('$ ')
-            if cmd == 'exit':
-                raise urwid.ExitMainLoop()
+            if cmd in self._builtins:
+                self._builtins[cmd]()
             elif cmd:
                 self._run_external_command(cmd)
             self.prompt_widget.set_edit_text('')
 
         elif key == 'ctrl d':
-            raise urwid.ExitMainLoop()
-
-        elif key == 'ctrl l':
-            # Muscle memory trying to clear the screen. Ignore.
-            pass
+            self._exit()
 
         elif key in ('left', 'right', 'backspace'):
             # Trying to move past the edges of the input text when
@@ -90,6 +93,9 @@ class DemoShell:
             shell=True,
             executable='/bin/bash',
         )
+
+    def _clear(self):
+        self.output_widget.set_text('')
 
     def extend_text(self, style, text):
         existing = self.output_widget.get_text()
