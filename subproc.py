@@ -5,9 +5,6 @@ import urwid
 import os
 import sys
 
-factor_me = 362923067964327863989661926737477737673859044111968554257667
-run_me = os.path.join(os.path.dirname(sys.argv[0]), 'subproc2.py')
-
 palette = [
     ('spacer', 'white', 'white'),
     ('stdout', 'black', 'white'),
