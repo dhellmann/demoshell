@@ -62,6 +62,6 @@ Use ``clear`` to clear the screen.
 Resources
 =========
 
-GitHub: https://github.com/dhellmann/demoshell
-Bugs: https://github.com/dhellmann/demoshell/issues
-Documentation: *Help wanted!*
+* GitHub: https://github.com/dhellmann/demoshell
+* Bugs: https://github.com/dhellmann/demoshell/issues
+* Documentation: *Help wanted!*
