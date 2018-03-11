@@ -58,3 +58,10 @@ Run any shell command at the prompt::
 Use ``exit`` or ``Ctrl-D`` to leave the shell.
 
 Use ``clear`` to clear the screen.
+
+Resources
+=========
+
+GitHub: https://github.com/dhellmann/demoshell
+Bugs: https://github.com/dhellmann/demoshell/issues
+Documentation: *Help wanted!*
