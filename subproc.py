@@ -39,8 +39,18 @@ def on_enter(key):
             shell=True,
         )
         prompt_widget.set_edit_text('')
+
     elif key == 'ctrl d':
         raise urwid.ExitMainLoop()
+
+    elif key == 'ctrl l':
+        # Muscle memory trying to clear the screen. Ignore.
+        pass
+
+    elif key in ('left', 'right', 'backspace'):
+        # Trying to move past the edges of the input text when
+        # editing. Ignore.
+        pass
     else:
         extend_text(output_widget, 'error',
                     'Unknown keypress {!r}'.format(key))
