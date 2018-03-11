@@ -42,7 +42,8 @@ def on_enter(key):
     elif key == 'ctrl d':
         raise urwid.ExitMainLoop()
     else:
-        extend_text(output_widget, 'error', key)
+        extend_text(output_widget, 'error',
+                    'Unknown keypress {!r}'.format(key))
 
 
 def extend_text(widget, style, text):
@@ -60,6 +61,8 @@ def extend_text(widget, style, text):
         parts.insert(0, ('stdout', ''))
         parts.insert(0, (style, text))
         parts.insert(0, ('spacer', '\n'))
+    elif style == 'error':
+        parts.insert(0, (style, text.rstrip() + '\n'))
     elif style == 'stdout':
         loc = None
         for i, p in enumerate(parts):
