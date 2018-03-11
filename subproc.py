@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+# TODO: record history and map arrow keys to navigating it
+# TODO: configuration file to load palette, shell, etc.
+# TODO: what to do about ctrl-l for clearing the screen
+# TODO: ctrl-c handling
+# TODO: fix output mingling between commands by using different widgets?
+
 import functools
 import subprocess
 import urwid
