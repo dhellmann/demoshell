@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import functools
 import subprocess
 import urwid
 import os
@@ -8,6 +9,7 @@ import sys
 palette = [
     ('spacer', 'white', 'white'),
     ('stdout', 'black', 'white'),
+    ('stderr', 'light red', 'white'),
     ('command', 'black', 'light gray'),
     ('error', 'light red', 'black'),
 ]
@@ -27,11 +29,22 @@ def on_enter(key):
         if cmd == 'exit':
             raise urwid.ExitMainLoop()
         extend_text(output_widget, 'command', cmd + '\n')
-        write_fd = loop.watch_pipe(received_output)
+        stdout_fd = loop.watch_pipe(
+            functools.partial(
+                received_output,
+                style='stdout',
+            )
+        )
+        stderr_fd = loop.watch_pipe(
+            functools.partial(
+                received_output,
+                style='stderr',
+            )
+        )
         proc = subprocess.Popen(
             cmd,
-            stdout=write_fd,
-            stderr=subprocess.STDOUT,
+            stdout=stdout_fd,
+            stderr=stderr_fd,
             close_fds=True,
             shell=True,
             executable='/bin/bash',
@@ -67,14 +80,16 @@ def extend_text(widget, style, text):
         # reverse order because we're pushing them onto the front of
         # the list
         parts.insert(0, ('stdout', ''))
+        parts.insert(0, ('stderr', ''))
         parts.insert(0, (style, text))
         parts.insert(0, ('spacer', '\n'))
     elif style == 'error':
         parts.insert(0, (style, text.rstrip() + '\n'))
-    elif style == 'stdout':
+    elif style in ('stdout', 'stderr'):
+        # Append to the most recently added block of the right style.
         loc = None
         for i, p in enumerate(parts):
-            if p[0] == 'stdout':
+            if p[0] == style:
                 loc = i
                 break
         else:
@@ -86,8 +101,8 @@ def extend_text(widget, style, text):
     widget.set_text(parts)
 
 
-def received_output(data):
-    extend_text(output_widget, 'stdout', data.decode('utf-8'))
+def received_output(data, style):
+    extend_text(output_widget, style, data.decode('utf-8'))
 
 
 loop = urwid.MainLoop(
