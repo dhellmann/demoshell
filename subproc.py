@@ -28,33 +28,15 @@ frame_widget = urwid.Frame(
     focus_part='header',
 )
 
+
 def on_enter(key):
     if key == 'enter':
         cmd = prompt_widget.text
         cmd = cmd.lstrip('$ ')
         if cmd == 'exit':
             raise urwid.ExitMainLoop()
-        extend_text(output_widget, 'command', cmd + '\n')
-        stdout_fd = loop.watch_pipe(
-            functools.partial(
-                received_output,
-                style='stdout',
-            )
-        )
-        stderr_fd = loop.watch_pipe(
-            functools.partial(
-                received_output,
-                style='stderr',
-            )
-        )
-        proc = subprocess.Popen(
-            cmd,
-            stdout=stdout_fd,
-            stderr=stderr_fd,
-            close_fds=True,
-            shell=True,
-            executable='/bin/bash',
-        )
+        elif cmd:
+            run_external_command(cmd)
         prompt_widget.set_edit_text('')
 
     elif key == 'ctrl d':
@@ -71,6 +53,30 @@ def on_enter(key):
     else:
         extend_text(output_widget, 'error',
                     'Unknown keypress {!r}'.format(key))
+
+
+def run_external_command(cmd):
+    extend_text(output_widget, 'command', cmd + '\n')
+    stdout_fd = loop.watch_pipe(
+        functools.partial(
+            received_output,
+            style='stdout',
+        )
+    )
+    stderr_fd = loop.watch_pipe(
+        functools.partial(
+            received_output,
+            style='stderr',
+        )
+    )
+    proc = subprocess.Popen(
+        cmd,
+        stdout=stdout_fd,
+        stderr=stderr_fd,
+        close_fds=True,
+        shell=True,
+        executable='/bin/bash',
+    )
 
 
 def extend_text(widget, style, text):
