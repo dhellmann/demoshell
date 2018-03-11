@@ -5,6 +5,8 @@
 # TODO: what to do about ctrl-l for clearing the screen
 # TODO: ctrl-c handling
 # TODO: fix output mingling between commands by using different widgets?
+# TODO: allow the config file to define new builtins
+# TODO: allow the config file to define aliases to handle the "ll" case
 
 import functools
 import subprocess
