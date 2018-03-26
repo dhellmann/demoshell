@@ -27,6 +27,8 @@ at the top of the screen and showing the output of commands below,
 pushing older commands off of the bottom of the screen to make space
 for newer text.
 
+.. image:: demo.gif
+
 Using demoshell
 ===============
 
