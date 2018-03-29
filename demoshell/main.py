@@ -14,6 +14,8 @@ import subprocess
 import urwid
 import os
 import sys
+from appdirs import *
+import configparser
 
 
 class DemoShell:
@@ -38,6 +40,8 @@ class DemoShell:
             'exit': self._exit,
             'clear': self._clear,
         }
+
+        self._load_config()
 
     def run(self):
         self.loop = urwid.MainLoop(
@@ -136,6 +140,29 @@ class DemoShell:
 
     def received_output(self, data, style):
         self.extend_text(style, data.decode('utf-8'))
+
+    def _load_config(self):
+        appname = "DemoShell"
+        appauthor = "Doug Hellman"    
+        data_dir = user_data_dir(appname,appauthor)
+        filename = "demoshell.ini"
+        filepath = os.path.join(data_dir,filename)
+
+        if (os.path.isdir(data_dir) == False ):
+            os.makedirs(data_dir)
+        
+        if (os.path.isfile(filepath) == False):
+            with open(os.path.join(data_dir,filename),'w+') as configfile:
+                Config = configparser.ConfigParser()
+                Config.add_section('Aliases')
+                #Config.set("Aliases","ll","ls -la")  #This is how you would set alias with code. 
+                Config.write(configfile)    
+            
+        with open(filepath,'r+') as configfile:
+            Config = configparser.ConfigParser()
+            Config.read(filepath)
+            print(Config.sections())
+            print(Config.get('Aliases','ll'))
 
 
 def main():
