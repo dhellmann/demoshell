@@ -41,7 +41,9 @@ class DemoShell:
             'clear': self._clear,
         }
 
+        self._aliases = {}
         self._load_config()
+        
 
     def run(self):
         self.loop = urwid.MainLoop(
@@ -58,6 +60,11 @@ class DemoShell:
         if key == 'enter':
             cmd = self.prompt_widget.text
             cmd = cmd.lstrip('$ ')
+
+            if cmd in self._aliases:
+                #Insert code to print the alias here. 
+                cmd = self._aliases[cmd]
+
             if cmd in self._builtins:
                 self._builtins[cmd]()
             elif cmd:
@@ -157,13 +164,15 @@ class DemoShell:
                 Config.add_section('Aliases')
                 #Config.set("Aliases","ll","ls -la")  #This is how you would set alias with code. 
                 Config.write(configfile)    
-            
+
+         
+    #Read Aliases below
         with open(filepath,'r+') as configfile:
             Config = configparser.ConfigParser()
             Config.read(filepath)
-            print(Config.sections())
-            print(Config.get('Aliases','ll'))
-
+            for key in Config['Aliases'].keys():
+                self._aliases[key] = Config.get('Aliases',key)
+                
 
 def main():
     DemoShell().run()
