@@ -61,6 +61,27 @@ Use ``exit`` or ``Ctrl-D`` to leave the shell.
 
 Use ``clear`` to clear the screen.
 
+Config File for DemoShell are in following location:
+
+If running on Mac OS:
+~/Library/Application Support/DemoShell/demoshell.ini
+
+If running on Linux:
+~/.local/share/DemoShell/demoshell.ini
+
+If running on Windows:
+C:\Documents and Settings\<User>\Application Data\Local Settings\Doug Hellman\DemoShell\demoshell.ini
+OR:
+C:\Documents and Settings\<User>\Application Data\Doug Hellman\DemoShell\demoshell.ini
+
+To add Aliases:
+Open config file in a text editor
+Edit "Aliases" section as per example below. 
+alias = alias command. It may look something like below.
+
+[Aliases]
+ll = ls -la
+
 Resources
 =========
 
