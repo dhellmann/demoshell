@@ -147,26 +147,25 @@ class DemoShell:
         self.extend_text(style, data.decode('utf-8'))
 
     def _load_config(self):
-        appname = "DemoShell"
-        appauthor = "Doug Hellman"
-        data_dir = appdirs.user_data_dir(appname, appauthor)
-        filename = "demoshell.ini"
-        filepath = os.path.join(data_dir, filename)
+        appname = "demoshell"
+        data_dir = appdirs.user_data_dir(appname)
+        config_filename = os.path.join(data_dir, "demoshell.ini")
 
-        if not os.path.isdir(data_dir):
-            os.makedirs(data_dir)
+        self.config = configparser.ConfigParser()
+        files_read = self.config.read(config_filename)
 
-        if not os.path.isfile(filepath):
-            with open(os.path.join(data_dir, filename), 'w+') as configfile:
-                Config = configparser.ConfigParser()
-                Config.add_section('Aliases')
-                Config.write(configfile)
+        if not files_read:
+            self.config.add_section('Aliases')
 
-        with open(filepath, 'r+') as configfile:
-            Config = configparser.ConfigParser()
-            Config.read(filepath)
-            for key in Config['Aliases'].keys():
-                self._aliases[key] = Config.get('Aliases', key)
+            if not os.path.isdir(data_dir):
+                os.makedirs(data_dir)
+
+            with open(config_filename, 'w+') as config_file:
+                self.config.write(config_file)
+
+        # Copy the aliases into a data structure to make them easier
+        # to access.
+        self._aliases = dict(self.config['Aliases'].items())
 
 
 def main():
