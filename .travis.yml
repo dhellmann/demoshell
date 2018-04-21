@@ -1,0 +1,28 @@
+language: python
+
+# python:
+#   - "3.5"
+#   - "3.6"
+#   - "nightly"
+
+# Test the nightly build of cpython, but ignore any failures.
+# Add separate test environments for the docs and flake8 linter.
+matrix:
+  allow_failures:
+    - python: "nightly"
+  include:
+    # - env: BUILD=docs
+    - env: BUILD=linter
+
+# travis pre-installs some packages that may conflict with our test
+# dependencies, so remove them before we set ourselves up. Also
+# install pbr to avoid any setup_requires funkiness with
+# pip/setuptools.
+before_install:
+  - pip uninstall -y nose mock
+  - pip install pbr
+
+install: pip install .[test] .[docs]
+
+script:
+  - ./tools/travis.sh

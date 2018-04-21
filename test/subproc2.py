@@ -11,6 +11,6 @@ except NameError:
     pass
 
 num = int(sys.argv[1])
-for c in range(1,10000000):
+for c in range(1, 10000000):
     if num % c == 0:
         print("factor:", c)
