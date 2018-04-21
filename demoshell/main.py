@@ -13,8 +13,7 @@ import functools
 import subprocess
 import urwid
 import os
-import sys
-from appdirs import *
+import appdirs
 import configparser
 
 
@@ -43,7 +42,6 @@ class DemoShell:
 
         self._aliases = {}
         self._load_config()
-        
 
     def run(self):
         self.loop = urwid.MainLoop(
@@ -62,7 +60,7 @@ class DemoShell:
             cmd = cmd.lstrip('$ ')
 
             if cmd in self._aliases:
-                #Insert code to print the alias here. 
+                # Insert code to print the alias here.
                 cmd = self._aliases[cmd]
 
             if cmd in self._builtins:
@@ -99,7 +97,7 @@ class DemoShell:
                 style='stderr',
             )
         )
-        proc = subprocess.Popen(
+        subprocess.Popen(
             cmd,
             stdout=stdout_fd,
             stderr=stderr_fd,
@@ -117,7 +115,7 @@ class DemoShell:
         start = 0
         existing_text = existing[0]
         for attr, count in existing[1]:
-            parts.append((attr, existing_text[start:start+count]))
+            parts.append((attr, existing_text[start:start + count]))
             start += count
         if style == 'command':
             # insert a new command entry and an empty stdout entry, in
@@ -150,32 +148,30 @@ class DemoShell:
 
     def _load_config(self):
         appname = "DemoShell"
-        appauthor = "Doug Hellman"    
-        data_dir = user_data_dir(appname,appauthor)
+        appauthor = "Doug Hellman"
+        data_dir = appdirs.user_data_dir(appname, appauthor)
         filename = "demoshell.ini"
-        filepath = os.path.join(data_dir,filename)
+        filepath = os.path.join(data_dir, filename)
 
-        if (os.path.isdir(data_dir) == False ):
+        if not os.path.isdir(data_dir):
             os.makedirs(data_dir)
-        
-        if (os.path.isfile(filepath) == False):
-            with open(os.path.join(data_dir,filename),'w+') as configfile:
+
+        if not os.path.isfile(filepath):
+            with open(os.path.join(data_dir, filename), 'w+') as configfile:
                 Config = configparser.ConfigParser()
                 Config.add_section('Aliases')
-                #Config.set("Aliases","ll","ls -la")  #This is how you would set alias with code. 
-                Config.write(configfile)    
+                Config.write(configfile)
 
-         
-    #Read Aliases below
-        with open(filepath,'r+') as configfile:
+        with open(filepath, 'r+') as configfile:
             Config = configparser.ConfigParser()
             Config.read(filepath)
             for key in Config['Aliases'].keys():
-                self._aliases[key] = Config.get('Aliases',key)
-                
+                self._aliases[key] = Config.get('Aliases', key)
+
 
 def main():
     DemoShell().run()
+
 
 if __name__ == '__main__':
     main()
