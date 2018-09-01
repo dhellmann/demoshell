@@ -77,6 +77,9 @@ class DemoShell:
             # editing. Ignore.
             pass
 
+        elif isinstance(key, tuple) and key[0].startswith('mouse '):
+            pass
+
         else:
             self.extend_text(
                 'error',
