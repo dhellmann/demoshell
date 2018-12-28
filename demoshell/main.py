@@ -16,6 +16,9 @@ import os
 import appdirs
 import configparser
 
+# Remove default map of ctrl + l
+del urwid.command_map['ctrl l']
+
 
 class DemoShell:
 
@@ -68,6 +71,9 @@ class DemoShell:
             elif cmd:
                 self._run_external_command(cmd)
             self.prompt_widget.set_edit_text('')
+
+        elif key == 'ctrl l':
+            self._clear()
 
         elif key == 'ctrl d':
             self._exit()
