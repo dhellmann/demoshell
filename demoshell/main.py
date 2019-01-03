@@ -68,6 +68,8 @@ class DemoShell:
         if key == 'enter':
             cmd = self.prompt_widget.text
             cmd = cmd.lstrip('$ ')
+            if cmd == '':
+                self.extend_text('error', '')
 
             if cmd in self._aliases:
                 # Insert code to print the alias here.
