@@ -81,6 +81,9 @@ class DemoShell:
                 self._run_external_command(cmd)
             self.prompt_widget.set_edit_text('')
 
+        elif key == 'ctrl l':
+            self._clear()
+
         elif key == 'ctrl c':
             if (not self.last_command) or isinstance(
                     self.last_command.poll(), int):
