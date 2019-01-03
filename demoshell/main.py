@@ -31,6 +31,7 @@ class DemoShell:
     ]
 
     def __init__(self):
+        self.last_command = None
         self.output_widget = urwid.Text(markup='')
         self.prompt_widget = urwid.Edit("$ ")
         self.frame_widget = urwid.Frame(
@@ -52,7 +53,13 @@ class DemoShell:
             unhandled_input=self.on_enter,
             palette=self.palette,
         )
-        self.loop.run()
+        try:
+            old = self.loop.screen.tty_signal_keys(
+                'undefined', 'undefined', 'undefined',
+                'undefined', 'undefined')
+            self.loop.run()
+        finally:
+            self.loop.screen.tty_signal_keys(*old)
 
     def _exit(self):
         raise urwid.ExitMainLoop()
@@ -72,8 +79,12 @@ class DemoShell:
                 self._run_external_command(cmd)
             self.prompt_widget.set_edit_text('')
 
-        elif key == 'ctrl l':
-            self._clear()
+        elif key == 'ctrl c':
+            if (not self.last_command) or isinstance(
+                    self.last_command.poll(), int):
+                pass
+            else:
+                self.last_command.terminate()
 
         elif key == 'ctrl d':
             self._exit()
@@ -106,7 +117,7 @@ class DemoShell:
                 style='stderr',
             )
         )
-        subprocess.Popen(
+        self.last_command = subprocess.Popen(
             cmd,
             stdout=stdout_fd,
             stderr=stderr_fd,
