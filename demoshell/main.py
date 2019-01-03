@@ -16,6 +16,9 @@ import os
 import appdirs
 import configparser
 
+# Remove default map of ctrl + l
+del urwid.command_map['ctrl l']
+
 
 class DemoShell:
 
